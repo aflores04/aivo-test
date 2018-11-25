@@ -13,6 +13,7 @@
     },
     "require": {
         "slim/slim": "^3.0",
-        "phpunit/phpunit": "^7.4"
+        "phpunit/phpunit": "^7.4",
+        "guzzlehttp/guzzle": "^6.3"
     }
 }
