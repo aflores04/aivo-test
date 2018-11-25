@@ -6,6 +6,11 @@
             "email": "alanfm89@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "TwitterApp\\": "src"
+        }
+    },
     "require": {
         "slim/slim": "^3.0",
         "phpunit/phpunit": "^7.4"
