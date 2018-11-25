@@ -9,6 +9,6 @@ use TwitterApp\Model\User;
 interface TwitterService
 {
 
-    public function getTweetFromUser(User $user);
+    public function getTweetFromUser(User $user, $limit);
 
 }

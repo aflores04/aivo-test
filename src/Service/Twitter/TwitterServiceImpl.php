@@ -10,8 +10,8 @@ class TwitterServiceImpl extends Service implements TwitterService
     /**
      * @param User $user
      */
-    public function getTweetFromUser(User $user)
+    public function getTweetFromUser(User $user, $limit)
     {
-        //
+        return 'hello world';
     }
 }
