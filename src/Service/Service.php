@@ -7,16 +7,9 @@ use GuzzleHttp\ClientInterface;
 
 class Service
 {
-    /**
-     * @var ClientInterface
-     */
-    private $client;
+    protected $client;
 
-    /**
-     * TwitterServiceImpl constructor.
-     * @param ClientInterface $client
-     */
-    public function __construct(ClientInterface $client)
+    public function __construct($client)
     {
         $this->client = $client;
     }

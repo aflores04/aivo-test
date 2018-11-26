@@ -2,18 +2,22 @@
 
 require '../vendor/autoload.php';
 
-// initialize Slim App
-$app = new \Slim\App();
+/**
+ * Set configurations
+ */
+require '../config/app.php';
+require '../config/twitter.php';
 
-require '../config/guzzle.php';
+// initialize Slim App
+$app = new \Slim\App($config);
 
 // add injection dependencies
 $container = $app->getContainer();
-$container['GuzzleClient'] = function ($container) {
-    return new \GuzzleHttp\Client($config);
+$container['TwitterClient'] = function () use ($twitter) {
+    return new \Abraham\TwitterOAuth\TwitterOAuth($twitter['api_key'], $twitter['secret'], $twitter['access_token'], $twitter['access_token_secret']);
 };
 $container['TwitterService'] = function ($container) {
-    return new \TwitterApp\Service\Twitter\TwitterServiceImpl($container->get('GuzzleClient'));
+    return new \TwitterApp\Service\Twitter\TwitterServiceImpl($container->get('TwitterClient'));
 };
 $container['TwitterRepository'] = function ($container) {
     return new \TwitterApp\Repository\TwitterRepositoryImpl($container->get('TwitterService'));
