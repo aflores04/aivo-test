@@ -1,3 +1,3 @@
 <?php
 
-$app->get('/hello', 'TwitterController:index');
+$app->get('/user/{id}/tweets[/{limit}]', 'TwitterController:index');

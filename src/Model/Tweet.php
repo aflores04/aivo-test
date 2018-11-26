@@ -7,6 +7,8 @@ use http\Exception\InvalidArgumentException;
 class Tweet
 {
 
+    const TWEETS_LIMIT = 10;
+
     /**
      * @var \DateTime
      */

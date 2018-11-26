@@ -3,6 +3,7 @@
 namespace TwitterApp\Controllers;
 
 use Slim\Container;
+use TwitterApp\Model\Tweet;
 use TwitterApp\Model\User;
 use TwitterApp\Repository\TwitterRepository;
 
@@ -26,13 +27,20 @@ class TwitterController extends Controller
      * @param $response
      * @throws \Interop\Container\Exception\ContainerException
      */
-    public function index($request, $response)
+    public function index($request, $response, $args)
     {
-        $service = $this->getContainer()->get('TwitterService');
+        $user = new User();
 
-        $user = new User('hola');
-        
-        $response->write($this->repository->getTweetsFromUser($user, 10));
+        // default tweet limits 10
+        $limit = Tweet::TWEETS_LIMIT;
+
+        if (array_key_exists('id', $args))
+            $user->setId($args['id']);
+
+        if (array_key_exists('limit', $args))
+            $limit = $args['limit'];
+
+        $response->write($this->repository->getTweetsFromUser($user, $limit));
     }
 
 }
