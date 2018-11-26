@@ -2,6 +2,6 @@
 
 $config = [
 
-    'displayErrorDetails' => true
+    'displayErrorDetails' => true,
 
 ];

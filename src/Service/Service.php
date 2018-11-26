@@ -1,16 +1,18 @@
 <?php
 
-
 namespace TwitterApp\Service;
 
-use GuzzleHttp\ClientInterface;
+use Psr\Log\LoggerInterface;
 
 class Service
 {
     protected $client;
 
-    public function __construct($client)
+    protected $logger;
+
+    public function __construct($client, LoggerInterface $logger)
     {
+        $this->logger = $logger;
         $this->client = $client;
     }
 }

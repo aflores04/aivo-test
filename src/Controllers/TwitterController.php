@@ -36,16 +36,17 @@ class TwitterController extends Controller
         // default tweet limits 10
         $limit = Tweet::TWEETS_LIMIT;
 
-        if (array_key_exists('id', $args))
-            $user->setId($args['id']);
+        # if id does not exists on the route or is a string
+        if ( ! array_key_exists('id', $args) or ! is_numeric($args['id']))
+            return $response->withJson(['error' => 'Invalid user ID'], 400);
+
+        $user->setId($args['id']);
 
         if (array_key_exists('limit', $args))
             $limit = $args['limit'];
 
         if (is_null($this->repository->getTweetsFromUser($user, $limit)))
-            return $response->withJson([
-                'error' => 'User dosent exist'
-            ], 400);
+            return $response->withJson(['error' => 'User does not exist'], 400);
 
         return $response->withJson($this->repository->getTweetsFromUser($user, $limit), 200);
     }

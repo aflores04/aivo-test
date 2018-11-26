@@ -3,8 +3,6 @@
 
 namespace TwitterApp\Repository;
 
-
-use TwitterApp\Adapter\TweetAdapter;
 use TwitterApp\Model\Tweet;
 use TwitterApp\Model\User;
 use TwitterApp\Service\Twitter\TwitterService;
@@ -34,12 +32,31 @@ class TwitterRepositoryImpl implements TwitterRepository
     public function getTweetsFromUser(User $user, $limit)
     {
         return array_map(function ($value) {
-            $tweetAdapter = new TweetAdapter($value);
 
-            return $tweetAdapter->get()->toArray();
+            return $this->mapToTweet($value)->toArray();
 
         }, $this->service->getTweetsFromUser($user, $limit));
     }
 
+    /**
+     * Transform tweet from TwitterResponseAdapter to TweetObject
+     * @param $value
+     * @return Tweet
+     * @throws \Exception
+     */
+    private function mapToTweet($value)
+    {
+        $tweet = new Tweet($value['text']);
+
+        $tweet->setCreatedAt(new \DateTime($value['created_at']));
+        $tweet->setInReply(false);
+
+        if ( ! is_null($value['in_reply']['id'] and ! is_null($value['in_reply']['name'])) ) {
+            $tweet->setId($value['in_reply']['id']);
+            $tweet->setName($value['in_reply']['name']);
+        }
+
+        return $tweet;
+    }
 
 }

@@ -3,33 +3,31 @@
 
 namespace TwitterApp\Adapter;
 
-
-use TwitterApp\Model\Tweet;
-
-class TwitterResponseAdapter
+class TwitterResponseAdapter implements ArrayAdapter
 {
-
-    private $tweets;
-
-    public function __construct($tweets)
+    /**
+     * @param $data
+     * @return array
+     * @throws \Exception
+     */
+    public function toArray($data)
     {
-        $this->tweets = $tweets;
-    }
+        try {
+            $map = array_map(function ($value) {
+                return [
+                    'created_at' => $value->created_at,
+                    'text' => $value->text,
+                    'in_reply' => [
+                        'id' => $value->in_reply_to_user_id,
+                        'name' => $value->in_reply_to_screen_name
+                    ]
+                ];
+            }, $data);
 
-    public function toArray()
-    {
-        $map = array_map(function ($value) {
-            return [
-                'created_at' => $value->created_at,
-                'text' => $value->text,
-                'in_reply' => [
-                    'id' => $value->in_reply_to_user_id,
-                    'name' => $value->in_reply_to_screen_name
-                ]
-            ];
-        }, $this->tweets);
-
-        return $map;
+            return $map;
+        } catch (\Exception $e) {
+            throw new \Exception('tweets most be an array');
+        }
     }
 
 }
