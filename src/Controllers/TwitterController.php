@@ -3,6 +3,8 @@
 namespace TwitterApp\Controllers;
 
 use Slim\Container;
+use Slim\Http\Request;
+use Slim\Http\Response;
 use TwitterApp\Model\Tweet;
 use TwitterApp\Model\User;
 use TwitterApp\Repository\TwitterRepository;
@@ -25,9 +27,9 @@ class TwitterController extends Controller
     /**
      * @param $request
      * @param $response
-     * @throws \Interop\Container\Exception\ContainerException
+     * @return Response
      */
-    public function index($request, $response, $args)
+    public function index(Request $request, Response $response, $args)
     {
         $user = new User();
 
@@ -40,7 +42,12 @@ class TwitterController extends Controller
         if (array_key_exists('limit', $args))
             $limit = $args['limit'];
 
-        $response->write($this->repository->getTweetsFromUser($user, $limit));
+        if (is_null($this->repository->getTweetsFromUser($user, $limit)))
+            return $response->withJson([
+                'error' => 'User dosent exist'
+            ], 400);
+
+        return $response->withJson($this->repository->getTweetsFromUser($user, $limit), 200);
     }
 
 }

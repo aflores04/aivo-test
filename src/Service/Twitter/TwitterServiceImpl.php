@@ -3,6 +3,7 @@
 namespace TwitterApp\Service\Twitter;
 
 use GuzzleHttp\Exception\RequestException;
+use TwitterApp\Adapter\TwitterResponseAdapter;
 use TwitterApp\Model\User;
 use TwitterApp\Service\Service;
 
@@ -10,22 +11,17 @@ class TwitterServiceImpl extends Service implements TwitterService
 {
     /**
      * @param User $user
+     * @return array
      */
-    public function getTweetFromUser(User $user, $limit)
+    public function getTweetsFromUser(User $user, $limit)
     {
-        try {
+        $response = $this->client->get('statuses/user_timeline', [
+            'user_id' => $user->getId(),
+            'count' => $limit
+        ]);
 
-            $response = $this->client->get('statuses/user_timeline', [
-                'user_id' => $user->getId(),
-                'count' => $limit
-            ]);
+        $adapter = new TwitterResponseAdapter($response);
 
-            echo '<pre>';
-            die(var_dump($response));
-
-        } catch (RequestException $e)
-        {
-            die(var_dump($e->getMessage()));
-        }
+        return $adapter->toArray();
     }
 }

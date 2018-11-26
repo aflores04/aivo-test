@@ -4,6 +4,8 @@
 namespace TwitterApp\Repository;
 
 
+use TwitterApp\Adapter\TweetAdapter;
+use TwitterApp\Model\Tweet;
 use TwitterApp\Model\User;
 use TwitterApp\Service\Twitter\TwitterService;
 
@@ -24,8 +26,20 @@ class TwitterRepositoryImpl implements TwitterRepository
         $this->service = $service;
     }
 
+    /**
+     * @param User $user
+     * @param $limit
+     * @return array
+     */
     public function getTweetsFromUser(User $user, $limit)
     {
-        return $this->service->getTweetFromUser($user, $limit);
+        return array_map(function ($value) {
+            $tweetAdapter = new TweetAdapter($value);
+
+            return $tweetAdapter->get()->toArray();
+
+        }, $this->service->getTweetsFromUser($user, $limit));
     }
+
+
 }
