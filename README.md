@@ -1,5 +1,4 @@
-# aivo-test
-Techincal test for Aivo
+# Tweets fom user
 
 ### Instalar
 ###### $ composer install
